@@ -1,4 +1,5 @@
 <?php
+//These lines get the database ready and puts it in the $con string
 $con = mysqli_connect("127.0.0.1", "root","","cars");
 $sql = "SELECT count(id) FROM car";
 $query = mysqli_query($con, $sql);
@@ -24,7 +25,7 @@ $pagenum =1;
 //Get pagenum from URL vars if it is present, else it is = 1
 if(isset($_GET['pn']))
 {
-	$pagenum = preg_replace('#[^0-9]#','',$_GET(['pn']));
+	$pagenum = preg_replace('#[^0-9]#', '', $_GET['pn']);
 }
 //This makes sure the page number isn't below 1, or more than our $last page
 if($pagenum < 1) 
@@ -36,10 +37,10 @@ else if ($pagenum > $last)
 	$pagenum = $last;
 }
 //This sets the range of rows to query for the chosen $pagenum
-$limit = 'LIMIT'.($pagenum -1) * $page_rows.','.$page_rows;
+$limit = 'LIMIT '.($pagenum -1) * $page_rows.','.$page_rows;
 
 //This is your query again, it is for grabbing just one page worth of rows by applying $limit
-$sql = "SELECT * FROM car $limit";
+$sql = "SELECT * FROM car $limit;";
 $query = mysqli_query($con, $sql);
 
 //This shows the user what page they are on, and the total number of pages
@@ -85,15 +86,24 @@ if($last != 1)
 	}
 }
 	$list = '';
+	echo "<table border='1'>
+	<tr>
+	<th>ID</th>
+	<th>Make</th>
+	<th>Model</th>
+	<th>Year</th>
+	<th>Color</th>
+	</tr>";
 	while($row = mysqli_fetch_array($query, MYSQLI_ASSOC))
 	{
-		$id = $row["id"];
-		$make = $row["make"];
-		$model = $row["model"];
-		$year = $row["year"];
-		$color = $row["color"];
-		$list .= '<p>'.$id.' '.$make.' '.$model.' '.$year.' '.$color.' </p>';
+		echo "<tr>";
+		echo "<td>" . $row['id'] . "</td>";
+		echo "<td>" . $row['make'] . "</td>";
+		echo "<td>" . $row['model'] . "</td>";
+		echo "<td>" . $row['year'] . "</td>";
+		echo "<td>" . $row['color'] . "</td>";
 	}
+	echo "</table>";
 //Close your database connection
 mysqli_close($con);
 
@@ -103,12 +113,21 @@ mysqli_close($con);
 <head>
 	<title>Pager Project Intro</title>
 	<meta charset="utf-8" />
+	<style type="text/css">
+		body{ font-family:"Trebuchet MS", Arial, Helvetica, sans-serif;}
+		div#pagination_controls{font-size:18px;}
+		div#pagination_controls > a{ color:#000; }
+		div#pagination_controls > a:visited{ color:#000; }
+	</style>
 </head>
 
 <body>
 
 	<div id="main-content">
+		
 		<?php echo $list; ?> 
+		
+		<div id="pagination_controls"><?php echo $paginationCtrls; ?></div>
 	</div>
 
 </body>
