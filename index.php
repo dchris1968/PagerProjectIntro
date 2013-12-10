@@ -53,17 +53,52 @@ $paginationCtrls = '';
 //If there is more than 1 page worth of results
 if($last != 1)
 {
+	$first = 1;	
+	
 	/* First we check if we are on page one.  If we are then we don't need a link to
 	   the previous page or the first page so we do nothing.  If we aren't then we 
 	   generate links to the first page, and to the previous page. */
 	if ($pagenum > 1) {
 		$previous = $pagenum - 1;
+		$paginationCtrls .= '<a href="'.$_SERVER['PHP_SELF'].'?pn='.$first.'">First</a> &nbsp; &nbsp;';
 		$paginationCtrls .= '<a href="'.$_SERVER['PHP_SELF'].'?pn='.$previous.'">Previous</a> &nbsp; &nbsp;';
 		
+		
 		//Render clickable number links that should appear on the left of the target page number
-		for($i = $pagenum-4; $i < $pagenum; $i++){
-			if($i > 0){
-				$paginationCtrls .= '<a href="'.$_SERVER['PHP_SELF'].'?pn='.$i.'">'.$i.'</a> &nbsp;';
+		if($pagenum == $last)
+		{
+			for($i = $pagenum-4; $i < $pagenum; $i++)
+			{
+				if($i > 0){
+					$paginationCtrls .= '<a href="'.$_SERVER['PHP_SELF'].'?pn='.$i.'">'.$i.'</a> &nbsp;';
+				}
+			}
+		}
+		if($pagenum == $last-1)
+		{
+			for($i = $pagenum-3; $i < $pagenum; $i++)
+			{
+				if($i > 0){
+					$paginationCtrls .= '<a href="'.$_SERVER['PHP_SELF'].'?pn='.$i.'">'.$i.'</a> &nbsp;';
+				}
+			}
+		}
+		if($pagenum == $last-2)
+		{
+			for($i = $pagenum-2; $i < $pagenum; $i++)
+			{
+				if($i > 0){
+					$paginationCtrls .= '<a href="'.$_SERVER['PHP_SELF'].'?pn='.$i.'">'.$i.'</a> &nbsp;';
+				}
+			}
+		}
+		if(($pagenum != $last) && ($pagenum != $last-1) && ($pagenum != $last-2))
+		{
+			for($i = $pagenum-2; $i < $pagenum; $i++)
+			{
+				if($i > 0){
+					$paginationCtrls .= '<a href="'.$_SERVER['PHP_SELF'].'?pn='.$i.'">'.$i.'</a> &nbsp;';
+				}
 			}
 		}
 	}
@@ -71,19 +106,49 @@ if($last != 1)
 	$paginationCtrls .= ''.$pagenum.' &nbsp; ';
 	
 	//Render clickable number links that should appear on the right of the target page number
-	for($i = $pagenum+1; $i <= $last; $i++)
+	if($pagenum == 1)
 	{
-		$paginationCtrls .= '<a href="'.$_SERVER['PHP_SELF'].'?pn='.$i.'">'.$i.'</a> &nbsp;';
-		if($i >= $pagenum+4){
-			break;
+		for($i = $pagenum+1; $i <= $last; $i++)
+		{
+			$paginationCtrls .= '<a href="'.$_SERVER['PHP_SELF'].'?pn='.$i.'">'.$i.'</a> &nbsp;';
+			if($i >= $pagenum+4)
+			{
+				break;
+			}
 		}
 	}
 	
-	//This does the same as above, only checking if we are on the last page, and then generating the "Next"
-	if($pagenum != $last){
+	if($pagenum == 2)
+	{
+		for($i = $pagenum+1; $i <= $last; $i++)
+		{
+			$paginationCtrls .= '<a href="'.$_SERVER['PHP_SELF'].'?pn='.$i.'">'.$i.'</a> &nbsp;';
+			if($i >= $pagenum+3)
+			{
+				break;
+			}
+		}
+	}
+	
+	if($pagenum > 2)
+	{
+		for($i = $pagenum+1; $i <= $last; $i++)
+		{
+			$paginationCtrls .= '<a href="'.$_SERVER['PHP_SELF'].'?pn='.$i.'">'.$i.'</a> &nbsp;';
+			if($i >= $pagenum+2){
+				break;
+			}
+		}
+	}
+	//This does the same as above, only checking if we are on the last page, and then generating the "Next" and "Last"
+	
+	if($pagenum != $last)
+	{
 		$next = $pagenum + 1;
 		$paginationCtrls .= ' &nbsp; &nbsp; <a href="'.$_SERVER['PHP_SELF'].'?pn='.$next.'">Next</a>';
+		$paginationCtrls .= ' &nbsp; &nbsp; <a href="'.$_SERVER['PHP_SELF'].'?pn='.$last.'">Last</a>';
 	}
+	
 }
 	$list = '';
 	echo "<table border='1'>
