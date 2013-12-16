@@ -33,7 +33,7 @@ $pagenum =1;
 //Get pagenum from URL vars if it is present, else it is = 1
 if(isset($_GET['pn']))
 {
-	$pagenum = preg_replace('#[^0-9]#', '', $_GET['pn']);
+	$pagenum = $_GET['pn'];
 }
 
 //This makes sure the page number isn't below 1, or more than our $last page
